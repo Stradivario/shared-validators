@@ -1,3 +1,6 @@
+
+(function(isNode, isAngular) {
+
 'use strict'
 
 let validatorGenerators = {
@@ -125,7 +128,25 @@ let sharedValidators = {
 	}
 };
 
-module.exports = {
-	validators: sharedValidators,
-	ValidatorGenerators: validatorGenerators
-};
+
+	if (isAngular) {
+		var angularModule = angular.module('aux-shared-validators', []);
+		angularModule.constant('ValidatorGenerators', [validatorGenerators]);
+		angularModule.constant('sharedValidators', sharedValidators);
+		console.log('Loaded shared validators', 'isAngular: ', isAngular);
+	}
+
+	if (isNode) {
+		module.exports = {
+			validators: sharedValidators,
+			ValidatorGenerators: validatorGenerators
+		};
+		console.log('Loaded shared validators', 'isNode: ', isNode);
+		// validators.startInFuture.call({start:new Date()})
+	}
+
+
+
+})(typeof module !== 'undefined' && module.exports,  typeof angular !== 'undefined');
+
+
